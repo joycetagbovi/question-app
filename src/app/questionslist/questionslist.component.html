@@ -1,0 +1,122 @@
+<div class="flex flex-col">
+  <div *ngFor="let form of forms" class="flex gap-2 items-baseline">
+   
+    <div class="flex flex-col">
+    <div
+      *ngFor="let question of form.questions"
+      class="bg-white w-[770px]  max-w-full rounded-[8px] border border-[#DADCE0] p-5 my-5"
+    >
+      <div class="flex flex-row justify-between items-center">
+        <input
+        class="question-text"
+        type="text"
+        placeholder="Question Text"
+        [(ngModel)]="question.questionText"
+        (change)="handleQuestionTextChange(form.id, question.id, $any($event.target).value)"
+      />
+      
+        <select
+          class="border border-[#E1E5EA] w-[189px] h-[40px] rounded-[8px] px-2"
+          [(ngModel)]="question.answerType"
+          (change)="handleAnswerTypeChange(question, $event)"
+        >
+          <option value="">Select</option>
+          <option value="checkbox">Checkbox</option>
+          <option value="radio">Multiple-choice</option>
+          <option value="input">Paragraph</option>
+          <option value="shortAnswer">Short Answer</option>
+        </select>
+      </div>
+
+      <div
+        class="flex flex-col justify-between"
+        *ngIf="question.answerType === 'checkbox'"
+      >
+        <div
+          class="flex items-center mb-4"
+          *ngFor="let answer of question.answers; let i = index"
+        >
+          <input
+            id="checkbox-{{ question.id }}-{{ i }}"
+            type="checkbox"
+            [value]="answer.value"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+          />
+          <label
+            for="checkbox-{{ question.id }}-{{ i }}"
+            class="ms-2 text-sm font-medium text-gray-900"
+            >{{ answer.label }}</label
+          >
+        </div>
+        <div class="flex items-center gap-2">
+            <input type="'checkbox"  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
+            <button class=" text-md" (click)="handleAddOption(form.id, question)">
+                Add options
+              </button>  
+        </div>
+      </div>
+
+      <div class="flex flex-col" *ngIf="question.answerType === 'radio'">
+        <div
+          class="flex items-center mb-4"
+          *ngFor="let answer of question.answers; let i = index"
+        >
+          <input
+            id="radio-{{ question.id }}-{{ i }}"
+            type="radio"
+            [value]="answer.value"
+            [name]="'radio-' + question.id"
+            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded"
+          />
+          <label
+            for="radio-{{ question.id }}-{{ i }}"
+            class="ms-2 text-sm font-medium text-gray-900"
+            >{{ answer.label }}</label
+          >
+        </div>
+        <div class="flex items-center gap-2">
+            <input type="'radio"  class="w-4 h-4 text-blue-600 border border-gray-300 rounded-lg">
+            <button class=" text-md" (click)="handleAddOption(form.id, question)">
+                Add options
+              </button>  
+        </div>
+     
+      </div>
+
+      <div class="flex flex-col" *ngIf="question.answerType === 'input'">
+        <div
+          class="flex items-center mb-4"
+          *ngFor="let answer of question.answers; let i = index"
+        >
+          <input
+            id="input-{{ question.id }}-{{ i }}"
+            type="text"
+            [(ngModel)]="answer.value"
+            class="w-32 h-8 text-black"
+            placeholder="short text answer"
+          />
+        </div>
+      </div>
+      <div class="flex items-end justify-end mt-8">
+        <button (click)="handleDeleteQuestion(form.id, question.id)">
+        <svg class="w-4 h-4 text-red-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+          </svg>
+          </button>
+      </div>
+    </div>
+</div>
+<div class="flex flex-row">
+    <div
+      class="shadow rounded-[8px] bg-white w-[50px] h-[70px] flex justify-center items-center border border-[#DADCE0]"
+    >
+      <button
+        (click)="handleAddQuestion(form.id)"
+        class="rounded-md border-2 border-[#14181F] w-[24px] h-[24px] text-sm"
+      >
+        +
+      </button>
+    </div>
+  </div>
+  </div>
+</div>
